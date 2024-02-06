@@ -2,10 +2,7 @@
 
 source "https://rubygems.org"
 
-gem "puma", "~> 6.4"
+gem "rack", "~> 3.0.9"
+gem 'rackup', '~> 2.1'
 gem 'sinatra', '~> 4.0'
 gem "sinatra-contrib", "~> 4.0"
-
-group :development, :test do
-  gem 'pry', '~> 0.14.2'
-end

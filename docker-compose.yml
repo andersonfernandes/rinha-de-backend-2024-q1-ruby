@@ -1,15 +1,13 @@
 services:
   api:
     build:
-      context: ./
-      args:
-        - RUBY_VERSION=3.1.2
+      context: .
+      target: dev
     environment:
       - DATABASE_USERNAME=admin
       - DATABASE_PASSWORD=hTae9VsSoy86uKZ
       - DATABASE_HOST=db
       - DATABASE_PORT=5432
-      - RACK_ENV=development
     depends_on:
       - db
     command: ./bin/server
@@ -21,9 +19,8 @@ services:
     stdin_open: true
 
   db:
-    image: postgres:15
+    image: postgres:15.3-alpine
     environment:
-      - POSTGRES_HOST_AUTH_METHOD=trust
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=hTae9VsSoy86uKZ
       - POSTGRES_DB=crebitos
