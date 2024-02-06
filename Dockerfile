@@ -4,23 +4,18 @@ FROM ruby:3.2.3-alpine AS build
 RUN mkdir -p /app
 WORKDIR /app
 
-COPY Gemfile .
-COPY Gemfile.lock .
-
-RUN gem install bundler
-RUN bundle install
-
-EXPOSE 5000
-
-# Dev stage
-FROM build AS dev
-
 RUN apk add --update --no-cache \
   build-base \
   libpq-dev \
   tzdata
 
-ENV RACK_ENV=development
+COPY Gemfile .
+COPY Gemfile.lock .
+
+RUN gem install bundler
+RUN bundle install --verbose
+
+EXPOSE 5000
 
 # Prod stage
 FROM build AS prod

@@ -2,12 +2,10 @@ services:
   api:
     build:
       context: .
-      target: dev
+      target: build
     environment:
-      - DATABASE_USERNAME=admin
-      - DATABASE_PASSWORD=hTae9VsSoy86uKZ
-      - DATABASE_HOST=db
-      - DATABASE_PORT=5432
+      - DATABASE_URL=postgresql://admin:hTae9VsSoy86uKZ@db:5432/crebitos
+      - RACK_ENV=development
     depends_on:
       - db
     command: ./bin/server
@@ -26,6 +24,8 @@ services:
       - POSTGRES_DB=crebitos
     volumes:
       - postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
 
 volumes:
     postgres:
