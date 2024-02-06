@@ -1,7 +1,6 @@
 require 'sinatra'
+require './api/root'
 
 class Application < Sinatra::Base
-  get '/' do
-    'Hello World!'
-  end
+  register Api::Root
 end

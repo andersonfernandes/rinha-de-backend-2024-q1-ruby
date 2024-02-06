@@ -9,6 +9,7 @@ services:
       - DATABASE_PASSWORD=hTae9VsSoy86uKZ
       - DATABASE_HOST=db
       - DATABASE_PORT=5432
+      - RACK_ENV=development
     depends_on:
       - db
     command: ./bin/server
