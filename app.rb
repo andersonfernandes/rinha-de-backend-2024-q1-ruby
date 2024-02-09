@@ -1,5 +1,5 @@
-require 'sinatra'
-require './api/root'
+require "sinatra"
+require "./api/root"
 
 class Application < Sinatra::Base
   before do
