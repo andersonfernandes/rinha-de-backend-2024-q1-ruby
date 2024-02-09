@@ -23,20 +23,34 @@ module Api
         validate_transaction_request!
         validate_current_client!
 
-        balance = Database.with_advisory_lock(current_client[:id]) do
-          Models::Transaction.create(
+        result = Database.with_advisory_lock(current_client[:id]) do
+          transaction_creation = Models::Transaction.create(
             value: request_body["valor"],
             type: request_body["tipo"],
             description: request_body["descricao"],
             client_id: current_client[:id],
           )
 
-          current_client.calculate_balance
+          if transaction_creation[:success]
+            {
+              success: true,
+              balance: current_client.calculate_balance,
+            }
+          else
+            {
+              success: false,
+              message: transaction_creation[:message],
+            }
+          end
+        end
+
+        if (!result[:success])
+          halt 422, { message: result[:message] }.to_json
         end
 
         {
           limite: current_client[:limit],
-          saldo: balance,
+          saldo: result[:balance],
         }.to_json
       end
     end
