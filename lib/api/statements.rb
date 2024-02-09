@@ -4,8 +4,9 @@ module Api
   module Statements
     def self.registered(app)
       app.get "/clientes/:id/extrato" do
-        transactions = Models::Transaction.where(client_id: current_client[:id]).order(Sequel.desc(:id)).limit(10)
+        validate_current_client!
 
+        transactions = Models::Transaction.where(client_id: current_client[:id]).order(Sequel.desc(:id)).limit(10)
         {
           saldo: {
             total: current_client.calculate_balance,
