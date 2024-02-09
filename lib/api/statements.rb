@@ -1,18 +1,16 @@
-require "./models/client"
-require "./models/transaction"
+require "./lib/models/transaction"
 
 module Api
   module Statements
     def self.registered(app)
       app.get "/clientes/:id/extrato" do
-        client = Models::Client[params[:id]]
-        transactions = Models::Transaction.where(client_id: params[:id])
+        transactions = Models::Transaction.where(client_id: current_client[:id]).order(Sequel.desc(:id)).limit(10)
 
         {
           saldo: {
-            total: 0, # TODO: implement calculation
+            total: current_client.calculate_balance,
             data_extrato: Time.now.to_s,
-            limite: client[:limit],
+            limite: current_client[:limit],
           },
           ultimas_transacoes: transactions.map do |transaction|
             {

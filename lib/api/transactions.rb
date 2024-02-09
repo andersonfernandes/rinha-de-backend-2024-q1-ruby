@@ -1,3 +1,6 @@
+require "./config/database"
+require "./lib/models/transaction"
+
 module Api
   module Transactions
     def self.registered(app)
@@ -20,9 +23,21 @@ module Api
         validate_transaction_request!
         validate_current_client!
 
-        # TODO: implement transaction logic
+        balance = Database.with_advisory_lock(current_client[:id]) do
+          Models::Transaction.create(
+            value: request_body["valor"],
+            type: request_body["tipo"],
+            description: request_body["descricao"],
+            client_id: current_client[:id],
+          )
 
-        request_body.to_json
+          current_client.calculate_balance
+        end
+
+        {
+          limite: current_client[:limit],
+          saldo: balance,
+        }.to_json
       end
     end
   end

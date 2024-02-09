@@ -1,5 +1,6 @@
-require "./api/statements"
-require "./api/transactions"
+require "./lib/models/client"
+require "./lib/api/statements"
+require "./lib/api/transactions"
 
 module Api
   module Root
