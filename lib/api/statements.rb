@@ -9,7 +9,7 @@ module Api
         transactions = Models::Transaction.where(client_id: current_client[:id]).order(Sequel.desc(:id)).limit(10)
         {
           saldo: {
-            total: current_client.calculate_balance,
+            total: current_client.current_balance,
             data_extrato: Time.now.to_s,
             limite: current_client[:limit],
           },

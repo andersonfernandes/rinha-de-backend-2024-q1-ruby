@@ -1,14 +1,9 @@
+require "./config/database"
+
 module Models
   class Client < Sequel::Model
-    def calculate_balance
-      transactions = Models::Transaction.where(client_id: self[:id]).order(:id)
-
-      transactions.reduce(self[:initial_balance]) do |balance, transaction|
-        balance += transaction[:value] if transaction[:type] == "c"
-        balance -= transaction[:value] if transaction[:type] == "d"
-
-        balance
-      end
+    def update_balance!(value)
+      self.update(current_balance: self.current_balance + value)
     end
   end
 end

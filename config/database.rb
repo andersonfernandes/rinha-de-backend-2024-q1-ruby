@@ -9,7 +9,7 @@ module Database
       ENV["DATABASE_URL"],
       logger: Logger.new(STDOUT),
     )
-    @connection.sql_log_level = :debug if ENV["RACK_ENV"] != "production"
+    @connection.sql_log_level = :debug
     Sequel::Model.db = @connection
     Sequel::Model.plugin :json_serializer
 
@@ -23,18 +23,15 @@ module Database
   end
 
   def self.with_advisory_lock(id, &block)
-    self.lock(id)
-    result = block.call
-    self.unlock(id)
+    connection.transaction do
+      self.lock(id)
+      result = block.call
 
-    result
+      result
+    end
   end
 
   def self.lock(id)
-    self.connection["SELECT pg_advisory_lock(?)", id]
-  end
-
-  def self.unlock(id)
-    self.connection["SELECT pg_advisory_unlock(?)", id]
+    self.connection["SELECT pg_advisory_xact_lock(?)", id]
   end
 end

@@ -23,24 +23,23 @@ module Api
         validate_current_client!
 
         result = Database.with_advisory_lock(current_client[:id]) do
-          transaction_creation = Models::Transaction.create(
+          success, message = Models::Transaction.create(
             value: request_body["valor"],
             type: request_body["tipo"],
             description: request_body["descricao"],
-            client_id: current_client[:id],
-          )
+            client: current_client,
+          ).values_at(:success, :message)
 
-          if transaction_creation[:success]
-            {
-              success: true,
-              balance: current_client.calculate_balance,
-            }
-          else
-            {
-              success: false,
-              message: transaction_creation[:message],
-            }
+          if success
+            value = request_body["tipo"] == "d" ? request_body["valor"] * -1 : request_body["valor"]
+            current_client.update_balance!(value)
           end
+
+          {
+            success: success,
+            message: message,
+            balance: success ? current_client.current_balance : nil,
+          }
         end
 
         if (!result[:success])

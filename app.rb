@@ -6,7 +6,7 @@ require "./lib/api/root"
 class Application < Sinatra::Base
   configure :development, :production do
     logger = Logger.new(STDOUT)
-    logger.level = Logger::DEBUG if !production?
+    logger.level = Logger::DEBUG
     set :logger, logger
   end
 
