@@ -6,16 +6,16 @@ GEM
     multi_json (1.15.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
+    nio4r (2.7.0)
     pg (1.5.4)
+    puma (6.4.2)
+      nio4r (~> 2.0)
     rack (3.0.9)
     rack-protection (4.0.0)
       base64 (>= 0.1.0)
       rack (>= 3.0.0, < 4)
     rack-session (2.0.0)
       rack (>= 3.0.0)
-    rackup (2.1.0)
-      rack (>= 3)
-      webrick (~> 1.8)
     ruby2_keywords (0.0.5)
     sequel (5.77.0)
       bigdecimal
@@ -32,7 +32,6 @@ GEM
       sinatra (= 4.0.0)
       tilt (~> 2.0)
     tilt (2.3.0)
-    webrick (1.8.1)
 
 PLATFORMS
   ruby
@@ -40,8 +39,7 @@ PLATFORMS
 
 DEPENDENCIES
   pg (~> 1.5)
-  rack (~> 3.0.9)
-  rackup (~> 2.1)
+  puma (~> 6.4)
   sequel (~> 5.77)
   sinatra (~> 4.0)
   sinatra-contrib (~> 4.0)

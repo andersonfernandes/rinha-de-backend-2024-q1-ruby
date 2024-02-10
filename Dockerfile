@@ -25,8 +25,6 @@ COPY ./config /app/config
 COPY ./lib /app/lib
 COPY ./app.rb /app
 
-RUN rm /app/Gemfile /app/Gemfile.lock
-
 ENV RACK_ENV=production
 
 CMD [ "/app/bin/server" ]
