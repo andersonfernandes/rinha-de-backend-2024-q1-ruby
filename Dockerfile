@@ -20,10 +20,10 @@ EXPOSE 5000
 # Prod stage
 FROM build AS prod
 
-COPY ./api /app/api
 COPY ./bin /app/bin
+COPY ./config /app/config
+COPY ./lib /app/lib
 COPY ./app.rb /app
-COPY ./config.ru /app
 
 RUN rm /app/Gemfile /app/Gemfile.lock
 
