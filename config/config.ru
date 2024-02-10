@@ -1,5 +1,2 @@
-require './config/database'
-run Database.init
-
-require './app'
+require "./app"
 run Application
