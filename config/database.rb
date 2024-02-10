@@ -22,13 +22,11 @@ module Database
   end
 
   def self.with_advisory_lock(id, &block)
-    self.connection.transaction do
-      self.lock(id)
-      result = block.call
-      self.unlock(id)
+    self.lock(id)
+    result = block.call
+    self.unlock(id)
 
-      result
-    end
+    result
   end
 
   def self.lock(id)
