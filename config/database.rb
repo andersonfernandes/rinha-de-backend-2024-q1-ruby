@@ -25,9 +25,7 @@ module Database
   def self.with_advisory_lock(id, &block)
     connection.transaction do
       self.lock(id)
-      result = block.call
-
-      result
+      block.call
     end
   end
 

@@ -1,4 +1,5 @@
 require "./config/database"
+require "./lib/models/transaction"
 
 module Models
   class Client < Sequel::Model
@@ -6,4 +7,6 @@ module Models
       self.update(current_balance: self.current_balance + value)
     end
   end
+
+  Client.one_to_many :last_transactions, class: Models::Transaction, order: Sequel.desc(:at), limit: 10
 end

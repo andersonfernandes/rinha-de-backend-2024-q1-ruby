@@ -10,6 +10,10 @@ module Api
           @request_body ||= JSON.parse request.body.read
         end
 
+        def set_current_client(client)
+          @current_client = client
+        end
+
         def current_client
           @current_client ||= Models::Client[params[:id]]
         end
