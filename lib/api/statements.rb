@@ -6,14 +6,13 @@ module Api
     def self.registered(app)
       app.get "/clientes/:id/extrato" do
         client = Models::Client.eager(:last_transactions).where(id: params[:id]).first
-        set_current_client(client)
-        validate_current_client!
+        return not_found unless client
 
         {
           saldo: {
-            total: current_client[:current_balance],
+            total: client[:current_balance],
             data_extrato: Time.now.to_s,
-            limite: current_client[:limit],
+            limite: client[:limit],
           },
           ultimas_transacoes: client.last_transactions.map do |transaction|
             {

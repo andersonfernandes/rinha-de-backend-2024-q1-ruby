@@ -17,8 +17,4 @@ class Application < Sinatra::Base
   helpers Sinatra::CustomLogger
 
   register Api::Root
-
-  get "/" do
-    "ok"
-  end
 end
