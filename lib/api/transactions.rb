@@ -1,5 +1,4 @@
 require "./config/database"
-require "./lib/models/transaction"
 
 module Api
   module Transactions
@@ -19,38 +18,38 @@ module Api
       end
 
       app.post "/clientes/:id/transacoes" do
-        validate_transaction_request!
-        client = Models::Client[params[:id].to_i]
-        return not_found unless client
+        Database.connection.transaction do |connection|
+          validate_transaction_request!
 
-        result = Database.with_advisory_lock(client[:id].to_i) do
-          success, message = Models::Transaction.create(
-            value: request_body["valor"],
-            type: request_body["tipo"],
-            description: request_body["descricao"],
-            client: client,
-          ).values_at(:success, :message)
+          connection.exec_params("SELECT pg_advisory_xact_lock($1)", [params[:id].to_i])
+          client_sql = 'SELECT "current_balance", "limit" FROM "clients" WHERE "id"=$1 LIMIT 1'
+          client = connection.exec_params(client_sql, [params[:id].to_i]).first
+          return not_found unless client
 
-          if success
-            value = request_body["tipo"] == "d" ? request_body["valor"] * -1 : request_body["valor"]
-            client.update_balance!(value)
-          end
+          value, type, description = request_body.values_at("valor", "tipo", "descricao")
+
+          return halt(422) if type == "d" && (client["current_balance"] - value) < (client["limit"] * -1)
+
+          sql = <<-SQL
+            WITH transaction AS (
+              INSERT INTO "transactions" ("value", "type", "description", "client_id", "at")
+              VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)
+            )
+
+            UPDATE "clients"
+            SET "current_balance" = "clients"."current_balance" +
+                                  (SELECT CASE WHEN $2 = 'd' THEN $1 * -1 ELSE $1 END)
+            WHERE "clients"."id" = $4
+            RETURNING current_balance
+          SQL
+
+          result = connection.exec_params(sql, [value, type, description, params[:id].to_i]).first
 
           {
-            success: success,
-            message: message,
-            balance: success ? client.current_balance : nil,
-          }
+            limite: client["limit"],
+            saldo: result["current_balance"],
+          }.to_json
         end
-
-        if (!result[:success])
-          halt 422, { message: result[:message] }.to_json
-        end
-
-        {
-          limite: client[:limit],
-          saldo: result[:balance],
-        }.to_json
       end
     end
   end

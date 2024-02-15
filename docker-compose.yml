@@ -25,8 +25,6 @@ services:
       - POSTGRES_DB=crebitos
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - 5432:5432
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U admin -d crebitos -h 0.0.0.0 -p 5432"]
       interval: 3s

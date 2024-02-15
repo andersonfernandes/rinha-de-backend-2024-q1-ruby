@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     base64 (0.2.0)
-    bigdecimal (3.1.6)
+    connection_pool (2.4.1)
     multi_json (1.15.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
@@ -17,8 +17,6 @@ GEM
     rack-session (2.0.0)
       rack (>= 3.0.0)
     ruby2_keywords (0.0.5)
-    sequel (5.77.0)
-      bigdecimal
     sinatra (4.0.0)
       mustermann (~> 3.0)
       rack (>= 3.0.0, < 4)
@@ -38,9 +36,9 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  connection_pool (~> 2.4)
   pg (~> 1.5)
   puma (~> 6.4)
-  sequel (~> 5.77)
   sinatra (~> 4.0)
   sinatra-contrib (~> 4.0)
 
