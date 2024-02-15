@@ -6,11 +6,12 @@ services:
     environment:
       - DATABASE_URL=postgresql://admin:hTae9VsSoy86uKZ@db:5432/crebitos
       - RACK_ENV=development
-    depends_on:
-      - db
     command: ./bin/server
     ports:
       - 5000:5000
+    depends_on:
+      db:
+        condition: service_healthy
     volumes:
       - .:/app:cached
     tty: true
@@ -23,9 +24,11 @@ services:
       - POSTGRES_PASSWORD=hTae9VsSoy86uKZ
       - POSTGRES_DB=crebitos
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - 5432:5432
-
-volumes:
-    postgres:
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d crebitos -h 0.0.0.0 -p 5432"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
