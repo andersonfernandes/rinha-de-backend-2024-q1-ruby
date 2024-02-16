@@ -21,8 +21,8 @@ EXPOSE 5000
 FROM build AS prod
 
 COPY ./bin /app/bin
-COPY ./config /app/config
 COPY ./lib /app/lib
+COPY ./config.ru /app
 COPY ./app.rb /app
 
 ENV RACK_ENV=production

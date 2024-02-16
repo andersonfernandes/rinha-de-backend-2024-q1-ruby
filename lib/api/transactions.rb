@@ -1,4 +1,4 @@
-require "./config/database"
+require "./lib/adapters/database"
 
 module Api
   module Transactions

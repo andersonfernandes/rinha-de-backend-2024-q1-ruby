@@ -9,7 +9,7 @@ module Database
       ENV["DATABASE_URL"],
       logger: Logger.new(STDOUT),
     )
-    @connection.sql_log_level = :debug
+    @connection.sql_log_level = ENV["RACK_ENV"] == "development" ? :debug : :info
     Sequel::Model.db = @connection
     Sequel::Model.plugin :json_serializer
 
