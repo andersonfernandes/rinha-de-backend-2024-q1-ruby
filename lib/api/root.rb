@@ -1,4 +1,3 @@
-require "./lib/models/client"
 require "./lib/api/statements"
 require "./lib/api/transactions"
 

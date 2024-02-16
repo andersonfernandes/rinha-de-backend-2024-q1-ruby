@@ -1,6 +1,3 @@
-require "./lib/models/transaction"
-require "./lib/models/client"
-
 module Api
   module Statements
     def self.registered(app)

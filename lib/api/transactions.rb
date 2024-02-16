@@ -1,5 +1,4 @@
 require "./config/database"
-require "./lib/models/transaction"
 
 module Api
   module Transactions
