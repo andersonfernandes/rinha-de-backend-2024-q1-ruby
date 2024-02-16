@@ -60,7 +60,7 @@ CREATE TABLE public.transactions (
     value integer NOT NULL,
     type character(1) NOT NULL,
     description character varying,
-    at timestamp without time zone,
+    at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
     client_id integer,
     id integer NOT NULL
 );

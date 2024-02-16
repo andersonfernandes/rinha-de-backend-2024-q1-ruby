@@ -23,7 +23,7 @@ module Database
   end
 
   def self.with_advisory_lock(id, &block)
-    connection.transaction do
+    self.connection.transaction do
       self.lock(id)
       block.call
     end
