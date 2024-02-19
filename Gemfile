@@ -2,6 +2,7 @@
 
 source "https://rubygems.org"
 
+gem "auto_reloader", "~> 0.6.0"
 gem "pg", "~> 1.5"
 gem "sequel", "~> 5.77"
 gem "sinatra", "~> 3.2.0"

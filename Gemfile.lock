@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    auto_reloader (0.6.0)
     base64 (0.2.0)
     bigdecimal (3.1.6)
     daemons (1.4.1)
@@ -38,6 +39,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  auto_reloader (~> 0.6.0)
   pg (~> 1.5)
   sequel (~> 5.77)
   sinatra (~> 3.2.0)
