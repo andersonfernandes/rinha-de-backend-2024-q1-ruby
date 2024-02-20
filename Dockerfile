@@ -1,5 +1,6 @@
 # Build stage
 FROM ruby:3.2.3-alpine AS build
+ENV RUBY_YJIT_ENABLE=1
 
 RUN mkdir -p /app
 WORKDIR /app

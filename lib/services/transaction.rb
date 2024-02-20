@@ -14,7 +14,7 @@ module Services
     end
 
     def process_transaction
-      Database.with_advisory_lock(client_id) do
+      Database.connection.transaction do
         client = Database.connection["SELECT * FROM clients WHERE id=:id FOR UPDATE", id: client_id].first
         return on_fail.call(404) unless client
 

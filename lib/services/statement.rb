@@ -17,7 +17,7 @@ module Services
       return on_fail.call(404) unless client
 
       transactions = Database.connection[
-        "SELECT * FROM transactions WHERE client_id=:id ORDER BY at desc LIMIT 10 FOR UPDATE",
+        "SELECT * FROM transactions WHERE client_id=:id ORDER BY at desc LIMIT 10",
         id: client_id
       ].all
 

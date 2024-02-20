@@ -8,10 +8,9 @@ module Database
     @connection ||= Sequel.connect(
       ENV["DATABASE_URL"],
       logger: Logger.new(STDOUT),
+      max_connections: ENV.fetch("MAX_DATABASE_CONNECTIONS", 5),
     )
     @connection.sql_log_level = ENV["RACK_ENV"] == "development" ? :debug : :info
-    Sequel::Model.db = @connection
-    Sequel::Model.plugin :json_serializer
 
     @connection
   end
@@ -20,16 +19,5 @@ module Database
     init!
 
     @connection
-  end
-
-  def self.with_advisory_lock(id, &block)
-    self.connection.transaction do
-      self.lock(id)
-      block.call
-    end
-  end
-
-  def self.lock(id)
-    self.connection["SELECT pg_advisory_xact_lock(?)", id]
   end
 end
